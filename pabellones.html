@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pabellones</title>
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<body>
+   <div id="appPabellones">
+   <div class="container mt-2">
+   	<h1 v-text="titulo" class="text-center"></h1>
+    <div class="row justify-content-center">
+      <div class="col-xl-7 col-lg-8 col-md-10 col-12">
+      <table class="table table-striped table-inverse table-responsive" >
+        <thead class="thead-inverse">
+            <tr>
+                <th width="600px">Nombre</th>
+                <th >Gestionar</th>
+            </tr>
+            </thead>
+            <tbody>
+             <tr v-for="pabellon in pabellones" :key="pabellon.id_pabellon">
+             <td>{{pabellon.nombrepabellon.toUpperCase()}}</td>
+             <td>Editar | Eliminar</td>
+             </tr>
+            </tbody>
+    </table>
+      </div>	
+    </div>
+
+   </div>
+
+   </div>
+
+
+
+   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.js" integrity="sha512-uplugzeh2/XrRr7RgSloGLHjFV0b4FqUtbT5t9Sa/XcilDr1M3+88u/c+mw6+HepH7M2C5EVmahySsyilVHI/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
+
+<script type="text/javascript">
+url="http://127.0.0.1:9000/api/Pabellon/"
+new Vue({
+el:'#appPabellones',
+data:{
+titulo:'API REST CON LARAVEL 9 , VUE.js y AXIOS',
+pabellones:[]	
+},
+created(){
+this.mostrarPabellones()
+},
+methods:{
+mostrarPabellones:function(){
+axios.get(url+"all").then(response=>{
+this.pabellones=response.data
+});
+}	
+}
+});
+</script>

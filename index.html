@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso de Vue.js</title>
+</head>
+<body>
+    <div id="appsss">
+   <!----<h3>{{miTexto}}</h3>- una forma---->
+   <h4 v-text="miVariable"></h4>
+   <input type="text" v-model="nuevoTexto" @keyup.enter="metodo1" v-focus> 
+   <button v-on:click="metodo1">{{miButton}}</button>
+   <ul>
+   <li v-for="miscursos of cursos" >
+   {{miscursos.curso}} - {{miscursos.costo}} - 
+   <span v-if="miscursos.costo<=300">Curso Barato</span>
+   
+   </li>    
+   </ul>
+    </div>
+
+    <div id="aplicacion1">
+     <label for="txt-nombres">Nombre</label>
+     <input type="text" id="txt-nombres" placeholder="ingrese nombre" v-model="nuevaPersona" 
+     data-modalfocus autofocus="autofocus">
+     <label for="txt-edad">Edad</label>
+     <input type="text" id="txt-edad" placeholder="ingrese edad" v-model="nuevaEdad" @keyup.enter="agregarPersona">
+     <button @click="agregarPersona">Registrar</button>
+     <br>
+     <table border="1" style="width: 60%;">
+     <thead>
+     <tr>
+     <th>Nombre</th>
+     <th>Edad</th>
+     </tr>    
+     </thead>  
+     <tbody>
+     <tr v-for="persona of datosPersona" v-if="persona.nombre!=null">
+     <td>{{persona.nombre}}</td> 
+     <td>{{persona.edad}}</td>   
+     </tr>    
+     </tbody>  
+     </table>
+    </div>
+
+    <div class="nueva-App">
+    <button></button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!---SINTAXIS BÁSICA DE Vue.js-->
+    <script>
+    let miAplicacion=new Vue({
+    el:"#appsss",
+    data:{
+    miVariable:"HolaJava TecnologySoft",
+    miButton:"Guardar Datos",
+    cursos:[
+    {curso:'Programaciion I',costo:300},
+    {curso:'Sistemas expertos',costo:200},
+    {curso:'Laravel y MySQL',costo:340}
+    ],
+    nuevoTexto:'', /// por defecto vacio
+    NombrePersona:''
+    },
+    /// creación de métodos en Vue.js
+    methods: {
+    metodo1 (){/// método lo llamamos desde el boton con v-on:click="metodo1"
+    if(this.nuevoTexto==""){
+    alert("ingrese texto")    
+    }else{
+    alert(this.nuevoTexto)
+    this.nuevoTexto=''
+    }
+    }   
+    }
+    });
+    /// otra aplicacion para registrar en una tabla
+    let aplicaiconTabla=new Vue({
+    el:"#aplicacion1",
+    data:{
+    datosPersona:[{}], /// objeto vacio
+    nuevaPersona:'',
+    nuevaEdad:''
+    },
+    methods: {
+     agregarPersona (){
+      if(this.nuevaPersona==''){
+      alert('ingrese el nombre de la persona')
+   
+      }else{
+    if(this.nuevaEdad==''){
+     alert('ingrese a¿la edad de la persona')
+     }else{
+    this.datosPersona.push({nombre:this.nuevaPersona,edad:this.nuevaEdad})   
+     }
+      }
+      this.nuevaPersona='';this.nuevaEdad=''
+     }   
+    }
+
+    });
+
+  
+    </script>
+</body>
+</html>

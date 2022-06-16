@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue y PHP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<body>
+   <div id="app">
+   <div class="container mt-3">
+   <div class="row justify-content-center">
+   <div class="col-xl-7 col-lg-8 col-md-9 col-12">
+        <div class="card shadow">
+    <div class="card-header">
+    <span class="float-start"><h3>{{titulo}}</h3></span>
+    <span class="float-end"> <button class="btn btn-primary btn-sm" @click="showModal()"> <i class="fas fa-circle-plus"></i> nuevo</button></span>
+    </div>
+    <div class="card-body">
+    <table class="table table-striped table-inverse table-responsive">
+        <thead class="thead-inverse">
+            <tr>
+                <th width="600px">Nombre</th>
+                <th >Gestionar</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr v-for="pabellon in pabellones" :key="pabellon.id_pabellon">
+                 <td>{{pabellon.nombrepabellon.toUpperCase()}}</td>
+                 <td>
+                 <button class="btn btn-warning btn-sm" @click="showModalEditar(pabellon.id_pabellon,pabellon.nombrepabellon)"> <i class="fas fa-edit"></i></button>  
+                 <button  class="btn btn-danger btn-sm" @click="eliminarPabellon(pabellon.id_pabellon,pabellon.nombrepabellon)"><i class="fas fa-trash-alt"></i></button>
+                 </td>
+                </tr>
+            </tbody>
+    </table>
+    
+    </div>
+   </div>
+   </div>
+   </div>
+   </div>
+
+   <!--- MODAL PARA CREAR NUEVO PABELLON---->
+   <div class="modal fade" id="modalNuevo">
+  <div class="modal-dialog modal-dialog-centered"> 
+  <div class="modal-content">
+  <div class="modal-header">
+  <h3>{{tituloName}}</h3>
+  </div>
+  <div class="modal-body">
+  <div class="col-12">
+  <div class="form-group">
+  <label>Nombre pabellon</label>
+  <input type="text" name="" class="form-control" placeholder="nombre...." v-model="Name_Pabellon">  
+  </div>
+  <div class="text-center mt-1">
+  <button v-if="tituloButtonModal=='Guardar Pabellón'" @click="RegistroPabellon()"
+  class="btn btn-outline-success"><i class="fas fa-save"></i> {{tituloButtonModal}}</button>
+  <button  class="btn btn-outline-success" @click="updatePabellon()" v-else> <i class="fas fa-save"></i> {{tituloButtonModal}}</button>  
+  </div>
+  </div>
+  </div>   
+  </div>
+  </div>
+
+   </div>
+
+   </div>
+
+   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.js" integrity="sha512-uplugzeh2/XrRr7RgSloGLHjFV0b4FqUtbT5t9Sa/XcilDr1M3+88u/c+mw6+HepH7M2C5EVmahySsyilVHI/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</body>
+</html>
+
+<script>
+var IdPabellon
+url=" http://127.0.0.1:9000/api/Pabellon" /// esto es la api
+url1="http://localhost/usuarios";
+const curso=new Vue({
+el:'#app',
+data:{
+titulo:'Listado de empleados' ,
+pabellones:[],
+Name_Pabellon:'' ,
+tituloName:'',
+tituloButtonModal:'',
+IdBorrado:''
+},
+created() {
+this.mostrarEmpleados()  
+},
+methods: {
+mostrarEmpleados:function(){
+axios.get(url+"/all").then(response=>{
+this.pabellones=response.data
+});
+},
+showModal:function(){
+this.tituloName='Nuevo Pabellón'
+this.tituloButtonModal='Guardar Pabellón'
+this.Name_Pabellon=""
+$('#modalNuevo').modal("show")  
+},
+showModalEditar:function(Id,NombrePabellon){
+IdPabellon=Id
+this.Name_Pabellon=NombrePabellon
+this.tituloName='Editar Pabellones'
+this.tituloButtonModal='Guardar cambios'
+$('#modalNuevo').modal('show')
+},
+RegistroPabellon:function(){
+if(this.Name_Pabellon==''){
+alert("Ingrese el campo Nombre Pabellon")
+}else{
+axios.post(url+"/save",{namepabellon:this.Name_Pabellon}).then(response=>{
+if(response.data=='1'){
+Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: "Pabellon registrado correctamente",
+  showConfirmButton: false,
+  timer: 1500
+})  
+}else{
+Swal.fire({
+  position: 'top-end',
+  icon: 'warning',
+  title: "Error, este pabellon ya existe en la base de datos",
+  showConfirmButton: false,
+  timer: 1500
+})  
+}
+this.Name_Pabellon=''
+this.mostrarEmpleados()
+});
+}
+},
+
+updatePabellon:function(){
+axios.put(url+"/modify",{Id:IdPabellon,namepabedit:this.Name_Pabellon}).then(response=>{
+alert(response.data)
+$('#modalNuevo').modal('hide')
+this.mostrarEmpleados()
+});
+},
+eliminarPabellon:function(Id,PbName){
+this.IdBorrado=Id
+Swal.fire({
+  title: 'Estas seguro?',
+  text: "Deseas eliminar al pabellón "+PbName,
+  icon: 'question',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Yes, delete it!'
+}).then((result) => {
+  if (result.isConfirmed) {
+  this.destroys()
+  }
+})
+},
+destroys:function(){
+axios.delete(url+"/borrado",{data:{IdDelete:this.IdBorrado}}).then(response=>{
+  Swal.fire(
+      'Mensaje del sistema!',
+       response.data,
+      'success'
+    )
+  this.mostrarEmpleados()
+}).catch(error=>{
+   console.error('There was an error!', error);
+});
+}
+},
+});  
+</script>
